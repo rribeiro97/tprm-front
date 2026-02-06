@@ -48,9 +48,9 @@ import { something } from 'new-library';
 
 ## Project Overview
 
-**TPRM Client** is the frontend application for the DPO Service, a vendor risk management and third-party due diligence platform. This Next.js application provides the user interface for tracking vendors, conducting security assessments, and managing compliance documentation.
+**TPRM Frontend** is a vendor risk management and third-party due diligence platform. This Next.js application provides the user interface for tracking vendors, conducting security assessments, and managing compliance documentation.
 
-
+**Repository:** https://github.com/rribeiro97/tprm-front
 
 ---
 
