@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# TPRM Frontend Pre-commit Validation
+npx lint-staged

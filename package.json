@@ -9,7 +9,7 @@
     "lint": "eslint",
     "type-check": "tsc --noEmit",
     "format": "biome check --write",
-    "prepare": "husky || true"
+    "prepare": "husky"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
