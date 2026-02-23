@@ -1,17 +1,8 @@
 'use client';
 
-import React from 'react';
-import {
-  Box,
-  Container,
-  Typography,
-  Paper,
-  Button,
-  AppBar,
-  Toolbar,
-  Chip,
-} from '@mui/material';
-import { LogoutOutlined, DashboardOutlined } from '@mui/icons-material';
+import { DashboardOutlined, Description, LibraryBooks, LogoutOutlined } from '@mui/icons-material';
+import { AppBar, Box, Button, Chip, Container, Paper, Toolbar, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 
 /**
@@ -21,6 +12,7 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
  * Protected route - requires authentication.
  */
 export default function DashboardPage() {
+  const router = useRouter();
   const { user, logout } = useAuth();
 
   return (
@@ -32,17 +24,24 @@ export default function DashboardPage() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             TPRM Dashboard
           </Typography>
-          <Chip
-            label={user?.role || 'USER'}
-            color="secondary"
-            size="small"
-            sx={{ mr: 2 }}
-          />
           <Button
             color="inherit"
-            startIcon={<LogoutOutlined />}
-            onClick={logout}
+            startIcon={<Description />}
+            onClick={() => router.push('/documents')}
+            sx={{ mr: 1 }}
           >
+            Documentos
+          </Button>
+          <Button
+            color="inherit"
+            startIcon={<LibraryBooks />}
+            onClick={() => router.push('/compliance-kb')}
+            sx={{ mr: 2 }}
+          >
+            Compliance KB
+          </Button>
+          <Chip label={user?.role || 'USER'} color="secondary" size="small" sx={{ mr: 2 }} />
+          <Button color="inherit" startIcon={<LogoutOutlined />} onClick={logout}>
             Sair
           </Button>
         </Toolbar>
@@ -86,14 +85,31 @@ export default function DashboardPage() {
             </Box>
           )}
 
-          {/* Next Steps */}
+          {/* Quick Actions */}
           <Box sx={{ mt: 4, textAlign: 'center' }}>
-            <Typography variant="body2" color="text.secondary">
-              Esta é uma página de dashboard temporária.
+            <Typography variant="h6" gutterBottom>
+              Acesso Rápido
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Funcionalidades completas serão implementadas em breve.
-            </Typography>
+            <Box
+              sx={{ display: 'flex', gap: 2, mt: 2, flexWrap: 'wrap', justifyContent: 'center' }}
+            >
+              <Button
+                variant="contained"
+                size="large"
+                startIcon={<Description />}
+                onClick={() => router.push('/documents')}
+              >
+                Gestão de Documentos
+              </Button>
+              <Button
+                variant="contained"
+                size="large"
+                startIcon={<LibraryBooks />}
+                onClick={() => router.push('/compliance-kb')}
+              >
+                Base de Conhecimento
+              </Button>
+            </Box>
           </Box>
         </Paper>
       </Container>

@@ -1,10 +1,12 @@
-import apiClient from '@/lib/axios';
 import { AxiosError } from 'axios';
-import {
-  LoginCredentials,
-  AuthResponse,
-  LogoutResponse,
-} from '../types/auth.types';
+import apiClient from '@/lib/axios';
+import type { AuthResponse, LoginCredentials, LogoutResponse } from '../types/auth.types';
+import { authServiceMock } from './authService.mock';
+
+// Auth has its own mock toggle (NEXT_PUBLIC_USE_MOCK_AUTH) for when
+// we need real backend for other services but don't have auth credentials yet
+const USE_MOCK =
+  process.env.NEXT_PUBLIC_USE_MOCK === 'true' || process.env.NEXT_PUBLIC_USE_MOCK_AUTH === 'true';
 
 /**
  * Authentication Service
@@ -28,14 +30,14 @@ export const authService = {
    * @throws Error with message from API response
    */
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
+    if (USE_MOCK) {
+      return authServiceMock.login(credentials);
+    }
+
     try {
-      const response = await apiClient.post<AuthResponse>(
-        '/api/auth/login',
-        credentials,
-        {
-          withCredentials: true, // Send/receive cookies
-        }
-      );
+      const response = await apiClient.post<AuthResponse>('/api/auth/login', credentials, {
+        withCredentials: true, // Send/receive cookies
+      });
       return response.data;
     } catch (error) {
       // Extract error message from API response
@@ -60,6 +62,10 @@ export const authService = {
    * Backend implements token rotation - sets new cookies on each refresh.
    */
   async refresh(): Promise<AuthResponse> {
+    if (USE_MOCK) {
+      return authServiceMock.refresh();
+    }
+
     try {
       const response = await apiClient.post<AuthResponse>(
         '/api/auth/refresh',
@@ -88,6 +94,10 @@ export const authService = {
    * Backend clears the authentication cookies.
    */
   async logout(): Promise<LogoutResponse> {
+    if (USE_MOCK) {
+      return authServiceMock.logout();
+    }
+
     try {
       const response = await apiClient.post<LogoutResponse>(
         '/api/auth/logout',
@@ -100,9 +110,7 @@ export const authService = {
     } catch (error) {
       // Even if logout fails, clear client-side state
       if (error instanceof AxiosError) {
-        const message =
-          error.response?.data?.message ||
-          'Erro ao fazer logout.';
+        const message = error.response?.data?.message || 'Erro ao fazer logout.';
         throw new Error(message);
       }
       throw new Error('Erro ao fazer logout.');
