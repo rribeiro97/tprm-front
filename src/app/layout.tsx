@@ -1,9 +1,9 @@
 'use client';
 
-import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { AuthProvider } from '@/contexts/AuthContext';
+import { ThemeProvider } from '@mui/material/styles';
 import { ToastProvider } from '@/components/ui/ToastProvider';
+import { AuthProvider } from '@/contexts/AuthContext';
 import theme from '@/lib/theme';
 
 /**
@@ -15,24 +15,21 @@ import theme from '@/lib/theme';
  * - AuthProvider: Global authentication state management
  * - ToastProvider: Global toast notification system
  */
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
         <title>TPRM Client - Vendor Risk Management</title>
-        <meta name="description" content="Third-party risk management and vendor due diligence platform" />
+        <meta
+          name="description"
+          content="Third-party risk management and vendor due diligence platform"
+        />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <AuthProvider>
-            <ToastProvider>
-              {children}
-            </ToastProvider>
+            <ToastProvider>{children}</ToastProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>
